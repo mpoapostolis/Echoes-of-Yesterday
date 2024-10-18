@@ -84,7 +84,7 @@ export const Main = () => {
           </div>
         </div>
         <Canvas key={scene} className="w-screen h-screen">
-          <Fog />
+          {/* <Fog /> */}
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
           <Environment preset="night" background />a
