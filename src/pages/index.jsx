@@ -7,6 +7,8 @@ import { Scene } from "../components/scenes";
 import { useAtom } from "jotai";
 import { sceneAtom } from "../atoms";
 import { Sarah } from "../components/npcs/sarah";
+import { Dialog } from "../components/dialogue";
+import { EcctrlJoystick } from "ecctrl";
 
 const T = (props) => (
   <TransformControls
@@ -86,6 +88,9 @@ export const Main = () => {
             </span>
           </div>
         </div>
+        <div className="block lg:hidden">
+          <EcctrlJoystick />
+        </div>
         <Canvas key={scene} className="w-screen h-screen">
           {/* <Fog /> */}
           <ambientLight intensity={0.5} />
@@ -136,6 +141,7 @@ export const Main = () => {
             ))}
           </div>
         </div>
+        <Dialog />
       </div>
     </Suspense>
   );
