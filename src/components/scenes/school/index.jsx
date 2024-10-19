@@ -6,8 +6,8 @@ import React, { useRef } from "react";
 import { useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 
-export function Library(props) {
-  const { nodes, materials } = useGLTF("/library.glb");
+export function School(props) {
+  const { nodes, materials } = useGLTF("/school.glb");
   return (
     <RigidBody type="fixed" colliders="trimesh">
       <group {...props} scale={1} position={[-2, 0, 0]} dispose={null}>
@@ -616,4 +616,4 @@ export function Library(props) {
   );
 }
 
-useGLTF.preload("/library.glb");
+useGLTF.preload("/school.glb");

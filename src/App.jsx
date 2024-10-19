@@ -7,6 +7,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <Main />,
   },
+  {
+    path: "/editor",
+    element: <Main />,
+  },
 ]);
 
 const App = () => {

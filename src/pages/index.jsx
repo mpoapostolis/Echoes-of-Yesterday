@@ -6,6 +6,7 @@ import { Hero } from "../components/hero";
 import { Scene } from "../components/scenes";
 import { useAtom } from "jotai";
 import { sceneAtom } from "../atoms";
+import { Sarah } from "../components/npcs/sarah";
 
 const T = (props) => (
   <TransformControls
@@ -32,12 +33,14 @@ function Fog() {
 const sceneNames = [
   "Home",
   "TownStreet",
+  "ConvenienceStore",
   "Lake",
   "Library",
   "PetersHome",
   "OldChapel",
   "DreamSequence",
 ];
+
 export const Main = () => {
   const time = 3;
   const money = 100;
@@ -88,20 +91,22 @@ export const Main = () => {
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
           <Environment preset="night" background />a
-          <Suspense fallback={null}>
-            <Physics>
+          <Physics>
+            <Suspense fallback={null}>
               <Hero />
               <Scene />
-              {/* <Home />
+            </Suspense>
+            {/* <Home />
               <Mirror
                 position={[
                   0.9089313093778112, -1.1602481873041008, -2.0345656393541773,
                 ]}
               /> */}
-              scale={0.03}
-              <CuboidCollider position={[0, -10, 0]} args={[50, 0.5, 50]} />
-            </Physics>
-          </Suspense>
+            <Suspense fallback={null}>
+              <Sarah />
+            </Suspense>
+            <CuboidCollider position={[0, -10, 0]} args={[50, 0.5, 50]} />
+          </Physics>
         </Canvas>
       </div>
       <div
