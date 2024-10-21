@@ -25,7 +25,6 @@ const T = (props) => (
 
 function Fog() {
   useFrame(({ clock }) => {
-    console.log(ref.current);
     if (ref.current.far && ref.current.far > 2) ref.current.far -= 0.1;
   });
   const ref = useRef();

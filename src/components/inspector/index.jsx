@@ -6,6 +6,7 @@ import {
   selectedModelIdAtom,
 } from "../../atoms";
 import { Settings, X } from "lucide-react";
+import { select } from "three/webgpu";
 
 const degreeToRadian = (degrees) => (degrees * Math.PI) / 180;
 const radianToDegree = (radians) => (radians * 180) / Math.PI;
@@ -81,10 +82,36 @@ export function Inspector() {
               }
             />
           ))}
+          <div className="form-control">
+            <label className="label">scale({selectedModel["scale"][0]}) </label>
+            <input
+              type="range"
+              min={0}
+              step={0.1}
+              max="100"
+              values={selectedModel["scale"][0]}
+              onChange={(newValue) => {
+                const v = +newValue.target.value;
+                updateModelProperty("scale", [v, v, v]);
+              }}
+              className="mt-2 range range-xs"
+            />
+          </div>
         </InspectorSection>
 
         {/* Game Logic */}
         <InspectorSection title="Game Logic">
+          <InspectorInput
+            label="Dialogue"
+            value={selectedModel.dialog || ""}
+            onChange={(value) => updateModelProperty("dialog", value)}
+          />
+          <InspectorInput
+            label="Dialogue"
+            value={selectedModel.dialog || ""}
+            onChange={(value) => updateModelProperty("dialog", value)}
+          />
+
           {["requiredEnergy", "requiredMoney", "rewardMoney"].map((field) => (
             <InspectorInput
               key={field}
@@ -141,6 +168,7 @@ function InspectorVectorInput({ label, values, onChange }) {
           <input
             key={axis}
             type="number"
+            step={0.1}
             className="w-full rounded-none input input-bordered input-xs"
             value={values[index]}
             onChange={(e) => {

@@ -62,18 +62,21 @@ export function SceneHierarchy() {
   );
 
   // Function to delete a selected model from the scene
-  const deleteModel = useCallback(() => {
-    setScenes((prevScenes) => ({
-      ...prevScenes,
-      [activeSceneId]: {
-        ...prevScenes[activeSceneId],
-        models: prevScenes[activeSceneId].models.filter(
-          (model) => model.id !== selectedModelId,
-        ),
-      },
-    }));
-    setSelectedModelId(null);
-  }, [setScenes, activeSceneId, selectedModelId, setSelectedModelId]);
+  const deleteModel = useCallback(
+    (id) => {
+      setScenes((prevScenes) => ({
+        ...prevScenes,
+        [activeSceneId]: {
+          ...prevScenes[activeSceneId],
+          models: prevScenes[activeSceneId].models.filter(
+            (model) => model.id !== id,
+          ),
+        },
+      }));
+      setSelectedModelId(null);
+    },
+    [setScenes, activeSceneId, selectedModelId, setSelectedModelId],
+  );
 
   return (
     <div className="overflow-y-auto p-4 h-full bg-base-200 text-base-content min-w-60">
@@ -107,7 +110,10 @@ export function SceneHierarchy() {
               </button>
               <span
                 className={`font-medium truncate w-16 cursor-pointer ${activeSceneId === sceneId ? "text-primary" : "text-base-content"}`}
-                onClick={() => setActiveSceneId(sceneId)}
+                onClick={() => {
+                  setSelectedModelId(null);
+                  setActiveSceneId(sceneId);
+                }}
               >
                 {scene.name}
               </span>
@@ -138,31 +144,22 @@ export function SceneHierarchy() {
                       ? "bg-primary text-primary-content"
                       : "text-base-content hover:bg-base-200"
                   }`}
-                  onClick={() =>
+                  onClick={() => {
+                    setActiveSceneId(sceneId);
                     setSelectedModelId(
                       model.id === selectedModelId ? null : model.id,
-                    )
-                  }
+                    );
+                  }}
                 >
                   <div className="flex items-center">
                     <Box className="mr-2" size={14} />
                     {model.name}
                   </div>
                   <div className="flex">
-                    {selectedModelId === model.id && (
-                      <X
-                        size={14}
-                        className="text-primary-content hover:text-base-content"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedModelId(null);
-                        }}
-                      />
-                    )}
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        deleteModel(); // Delete the selected model
+                        deleteModel(model.id); // Delete the selected model
                       }}
                       className="btn btn-xs btn-ghost text-base-content hover:text-error"
                     >

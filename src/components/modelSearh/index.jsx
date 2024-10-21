@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { use3dModels } from "../../hooks/use3dModels";
 import { debounce } from "../../lib/utils";
 import { Plus } from "lucide-react";
+import { activeSceneIdAtom, sceneAtom, scenesAtom } from "../../atoms";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import * as THREE from "three";
 // Constants
 const cc0 = "https://creativecommons.org/publicdomain/zero/1.0/";
 const ccBy3 = "https://creativecommons.org/licenses/by/3.0";
@@ -151,33 +154,53 @@ function LoadingMessage({ text }) {
 
 // Individual model card
 function ModelCard({ model }) {
-  const onDragStart = (event) => {
-    event.dataTransfer.setData("application/json", JSON.stringify(model));
-  };
-
+  const [scene, setScene] = useAtom(scenesAtom);
+  const currentScene = useAtomValue(activeSceneIdAtom);
   return (
-    <div
-      draggable
-      onDragStart={onDragStart}
-      className="overflow-hidden relative z-50"
-    >
-      <div className="relative group">
-        <img
-          src={model.thumbnail}
-          alt={model.name}
-          className="w-full rounded-none min-h-32"
-        />
-        <p className="flex absolute top-0 justify-between p-2 w-full text-xs text-left bg-black bg-opacity-70 truncate">
-          <span>{model.name}</span>
-          {model.animated && (
-            <span className="text-xs rounded-full badge-xs text-warning">
-              Animated
-            </span>
-          )}
-        </p>
-        <ModelFooter model={model} />
+    <form method="dialog">
+      <div className="overflow-hidden relative z-50 modal-action">
+        <div
+          onClick={() => {
+            const uuid = new THREE.Object3D().uuid;
+            const newGlb = {
+              id: uuid,
+              name: model.name,
+              url: model.glb,
+              position: [0, 0, 0],
+              rotation: [0, 0, 0],
+              scale: [1, 1, 1],
+              interactionSound: model?.interactionSound ?? "",
+            };
+            setScene((scenes) => {
+              const newScene = {
+                ...scenes[currentScene],
+                models: [...(scenes[currentScene]?.models ?? []), newGlb],
+              };
+              return {
+                ...scenes,
+                [currentScene]: newScene,
+              };
+            });
+          }}
+          className="relative group"
+        >
+          <img
+            src={model.thumbnail}
+            alt={model.name}
+            className="w-full rounded-none min-h-32"
+          />
+          <p className="flex absolute top-0 justify-between p-2 w-full text-xs text-left bg-black bg-opacity-70 truncate">
+            <span>{model.name}</span>
+            {model.animated && (
+              <span className="text-xs rounded-full badge-xs text-warning">
+                Animated
+              </span>
+            )}
+          </p>
+          <ModelFooter model={model} />
+        </div>
       </div>
-    </div>
+    </form>
   );
 }
 
