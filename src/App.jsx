@@ -1,6 +1,7 @@
 import React from "react";
 import { Main } from "./pages";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Editor } from "./pages/editor";
 
 const router = createBrowserRouter([
   {
@@ -9,7 +10,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/editor",
-    element: <Main />,
+    element: <Editor />,
   },
 ]);
 
